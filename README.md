@@ -17,4 +17,8 @@ conda activate tfphd
 ### Downloading Stable-Diffusion Weights
 
 Download the StableDiffusion weights from the [Stability AI at Hugging Face](https://huggingface.co/stabilityai/stable-diffusion-2-1-base/blob/main/v2-1_512-ema-pruned.ckpt)
-(download the `sd-v2-1_512-ema-pruned.ckpt` file), and put it under `./ckpt` folder.
+(download the `sd-v2-1_512-ema-pruned.ckpt` file, This will occupy around 5GB storage)
+For example
+'''
+wget https://huggingface.co/stabilityai/stable-diffusion-2-1-base/resolve/main/v2-1_512-ema-pruned.ckpt?download=true
+'''
