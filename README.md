@@ -1,4 +1,4 @@
-# tfphd
+# TFPHD
 Training-Free Painterly Image Harmonization Using Diffusion Model
 ## Setup
 
@@ -9,8 +9,8 @@ This github repo is based on [TF-ICON](https://github.com/Shilin-LU/TF-ICON)  an
 ### Creating a Conda Environment
 
 ```
-git clone https://github.com/BlueDyee/tfphd.git
-cd tfphd
+git clone https://github.com/BlueDyee/TFPHD.git
+cd TFPHD
 conda env create -f tfphd_env.yaml
 conda activate tfphd
 ```
