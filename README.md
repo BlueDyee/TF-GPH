@@ -8,10 +8,10 @@ and has shared dependencies and model architecture. A VRAM of 23 GB is recommend
 ### Creating a Conda Environment
 
 ```
-git clone https://github.com/Shilin-LU/TF-ICON.git
-cd TF-ICON
-conda env create -f tf_icon_env.yaml
-conda activate tf-icon
+git clone https://github.com/BlueDyee/tfphd.git
+cd tfphd
+conda env create -f tfphd_env.yaml
+conda activate tfphd
 ```
 
 ### Downloading Stable-Diffusion Weights
