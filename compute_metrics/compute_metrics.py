@@ -126,9 +126,6 @@ def compute_clip_score(
     top, bottom = non_x.min(), non_x.max()
     fg_img = (stylized_img * composite_mask[:, :, None])[top:bottom, left:right]
 
-    if prompt is not None:
-        tokenized_prompt = clip.tokenize([prompt]).to(device)
-        text_features = F_torch.normalize(clip_model[0].encode_text(tokenized_prompt), dim=-1)
     preprocess_fg_img = clip_model[1](Image.fromarray(fg_img)).unsqueeze(0).to(device)
     preprocess_source_img = clip_model[1](Image.fromarray(source_img)).unsqueeze(0).to(device)
     fg_features = F_torch.normalize(clip_model[0].encode_image(preprocess_fg_img), dim=-1)
@@ -138,7 +135,13 @@ def compute_clip_score(
 
     text_score = None
     if prompt is not None:
-        text_score = (fg_features.squeeze() @ text_features.squeeze()).item() * 100
+        tokenized_prompt = clip.tokenize([prompt]).to(device)
+        preprocess_stylized = clip_model[1](Image.fromarray(stylized_img)).unsqueeze(0).to(device)
+        stylized_features = F_torch.normalize(
+            clip_model[0].encode_image(preprocess_stylized), dim=-1
+        )
+        text_features = F_torch.normalize(clip_model[0].encode_text(tokenized_prompt), dim=-1)
+        text_score = (stylized_features.squeeze() @ text_features.squeeze()).item() * 100
 
     return img_score, text_score
 
