@@ -2,7 +2,7 @@ import argparse
 import os
 from collections import defaultdict
 from numbers import Number
-from typing import Any, Optional, Union
+from typing import Any, Optional, Tuple, Union
 
 import clip
 import lpips
@@ -34,7 +34,7 @@ def parse_argument():
     return args
 
 
-def to_rgb_tensor(img: np.ndarray, size: Union[tuple[int, int]] = None):
+def to_rgb_tensor(img: np.ndarray, size: Union[Tuple[int, int]] = None):
     tensor = F_vision.to_tensor(img)
     if size is not None:
         tensor = F_vision.resize(tensor, size, antialias=True)
@@ -128,7 +128,7 @@ def compute_clip_score(
 
     if prompt is not None:
         tokenized_prompt = clip.tokenize([prompt]).to(device)
-        text_features = F_torch.normalize(clip_model[1].encode_text(tokenized_prompt), dim=-1)
+        text_features = F_torch.normalize(clip_model[0].encode_text(tokenized_prompt), dim=-1)
     preprocess_fg_img = clip_model[1](Image.fromarray(fg_img)).unsqueeze(0).to(device)
     preprocess_source_img = clip_model[1](Image.fromarray(source_img)).unsqueeze(0).to(device)
     fg_features = F_torch.normalize(clip_model[0].encode_image(preprocess_fg_img), dim=-1)
@@ -157,7 +157,8 @@ def main(args):
                 source_img_name,
                 composite_mask_name,
                 style_img_name,
-                *_,
+                style_text,
+                _,
                 stylized_img_name,
             ) = line.strip().split(",")
 
@@ -175,7 +176,12 @@ def main(args):
                 source_img, style_img, stylized_img, composite_mask, lpips_fn
             )
             img_clip, text_clip = compute_clip_score(
-                source_img, stylized_img, composite_mask, clip_model, device
+                source_img,
+                stylized_img,
+                composite_mask,
+                clip_model,
+                device,
+                prompt=f"a photo in {style_text} style",
             )
 
             meter.update(
