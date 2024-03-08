@@ -25,4 +25,16 @@ For example
 wget https://huggingface.co/stabilityai/stable-diffusion-2-1-base/resolve/main/v2-1_512-ema-pruned.ckpt?download=true
 (But in this way the file name will be "v2-1_512-ema-pruned.ckpt?download=true", you need to manually change to v2-1_512-ema-pruned.ckpt)
 ```
+## Run
+We provide three methods to run our repo **py/ipynb/app (gradio)**
+### py
+```
+python tfphd.py
+```
+### ipynb
+```
+Runall
+```
+### app
+Working on it
 
