@@ -3,7 +3,7 @@ Training-Free Painterly Image Harmonization Using Diffusion Model
 ## Setup
 
 Our codebase is built on [Stable-Diffusion](https://github.com/Stability-AI/stablediffusion)
-and has shared dependencies and model architecture. A VRAM of 23 GB is recommended, though this may vary depending on the input samples (minimum 20 GB).
+and has shared dependencies and model architecture. A VRAM of 23 GB is recommended (RTX 3090 for example), though this may vary depending on the input samples (minimum 20 GB). 
 
 This github repo is based on [TF-ICON](https://github.com/Shilin-LU/TF-ICON)  and [MasaCtrl](https://github.com/TencentARC/MasaCtrl/tree/main)
 ### Creating a Conda Environment
