@@ -38,3 +38,9 @@ Runall
 ### app
 Working on it
 
+## Evaluation
+```
+pip install git+https://github.com/openai/CLIP.git
+pip install lpips
+python compute_metrics/compute_metrics.py --img-root ./eval_data --label-file ./eval_data/harmonized_result_tfphd.csv
+```
