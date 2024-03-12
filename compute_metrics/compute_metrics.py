@@ -23,6 +23,13 @@ def parse_argument():
         "-f", "--label-file", type=str, required=True, help="Path to predicted images"
     )
     parser.add_argument(
+        "-p",
+        "--prefix",
+        type=str,
+        default="tfphd",
+        help="Prefix for controlling the target dataset",
+    )
+    parser.add_argument(
         "-cm",
         "--clip-model-type",
         type=str,
@@ -100,12 +107,13 @@ def compute_lpips(
     left, right = non_y.min(), non_y.max()
     top, bottom = non_x.min(), non_x.max()
     fg_img = (stylized_img * composite_mask[:, :, None])[top:bottom, left:right]
+    crop_fg_obj = (source_img * composite_mask[:, :, None])[top:bottom, left:right]
 
     bg_img = stylized_img * (1 - composite_mask[:, :, None])
     bg_style_img = style_img * (1 - composite_mask[:, :, None])
 
     fg_score = lpips_model(
-        to_rgb_tensor(fg_img, size=source_img.shape[:2]), to_rgb_tensor(source_img)
+        to_rgb_tensor(fg_img, size=crop_fg_obj.shape[:2]), to_rgb_tensor(crop_fg_obj)
     ).item()
     bg_score = lpips_model(to_rgb_tensor(bg_img), to_rgb_tensor(bg_style_img)).item()
 
@@ -146,7 +154,6 @@ def compute_clip_score(
     return img_score, text_score
 
 
-# foreground,mask,background,style,composite,hamonized
 def main(args):
     device = "cuda" if torch.cuda.is_available() else "cpu"
     lpips_fn = lpips.LPIPS(net="alex")
@@ -168,7 +175,9 @@ def main(args):
             source_img_path = os.path.join(args.img_root, "foreground_data", source_img_name)
             composite_mask_path = os.path.join(args.img_root, "mask_data", composite_mask_name)
             style_img_path = os.path.join(args.img_root, "background_data", style_img_name)
-            stylized_img_path = os.path.join(args.img_root, "harmonized_data", stylized_img_name)
+            stylized_img_path = os.path.join(
+                args.img_root, f"{args.prefix}_harmonized_data", stylized_img_name
+            )
 
             source_img = np.array(Image.open(source_img_path).convert("RGB"))
             composite_mask = np.array(Image.open(composite_mask_path).convert("L"))
