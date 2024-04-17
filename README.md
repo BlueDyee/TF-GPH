@@ -9,10 +9,10 @@ This github repo is based on [TF-ICON](https://github.com/Shilin-LU/TF-ICON)  an
 ### Creating a Conda Environment
 
 ```
-git clone https://github.com/BlueDyee/TFPHD.git
-cd TFPHD
-conda env create -f tfphd_env.yaml
-conda activate tfphd
+git clone https://github.com/BlueDyee/TF-GPH.git
+cd TF-GPH
+conda env create -f tfgph_env.yaml
+conda activate tfgph
 ```
 
 ### Downloading Stable-Diffusion Weights
@@ -26,11 +26,20 @@ wget https://huggingface.co/stabilityai/stable-diffusion-2-1-base/resolve/main/v
 (But in this way the file name will be "v2-1_512-ema-pruned.ckpt?download=true", you need to manually change to v2-1_512-ema-pruned.ckpt)
 ```
 ## Run
-We provide three methods to run our repo **py/ipynb/app (gradio)**
+We provide three methods to run our repo **py/ipynb/web app (gradio)**
 ### py
+Using default parameters
 ```
-python tfphd.py
+python tfgph_main.py 
 ```
+Customize parameters
+'''
+python tfgph_main.py --ref1 "./inputs/demo_input/kangaroo.jpg"/
+                     --ref2 "./inputs/demo_input/starry_night.jpg"/
+                     --comp "./inputs/demo_input/kangaroo_starry.jpg"/
+                     --share_step 15
+                     --share_layer 12
+'''
 ### ipynb
 ```
 Runall
