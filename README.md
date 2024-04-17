@@ -1,5 +1,5 @@
-# TFPHD
-Training-Free Painterly Image Harmonization Using Diffusion Model
+# TF-GPH
+Training-and-pormpt Free General Painterly Image Harmonization Using image-wise attention sharing
 ## Setup
 
 Our codebase is built on [Stable-Diffusion](https://github.com/Stability-AI/stablediffusion)
