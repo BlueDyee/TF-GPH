@@ -22,8 +22,7 @@ Download the StableDiffusion weights from the [Stability AI at Hugging Face](htt
 For example
 
 ```
-wget https://huggingface.co/stabilityai/stable-diffusion-2-1-base/resolve/main/v2-1_512-ema-pruned.ckpt?download=true
-(But in this way the file name will be "v2-1_512-ema-pruned.ckpt?download=true", you need to manually change to v2-1_512-ema-pruned.ckpt)
+wget -O v2-1_512-ema-pruned.ckpt https://huggingface.co/stabilityai/stable-diffusion-2-1-base/resolve/main/v2-1_512-ema-pruned.ckpt?download=true
 ```
 ## Run
 We provide three methods to run our repo **py/ipynb/web app (gradio)**
