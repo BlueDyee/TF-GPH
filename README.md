@@ -33,13 +33,13 @@ Using default parameters
 python tfgph_main.py 
 ```
 Customize parameters
-'''
+```
 python tfgph_main.py --ref1 "./inputs/demo_input/kangaroo.jpg"/
                      --ref2 "./inputs/demo_input/starry_night.jpg"/
                      --comp "./inputs/demo_input/kangaroo_starry.jpg"/
                      --share_step 15
                      --share_layer 12
-'''
+```
 ### ipynb
 ```
 Runall
