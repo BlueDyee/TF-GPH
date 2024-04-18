@@ -27,8 +27,12 @@ wget -O v2-1_512-ema-pruned.ckpt https://huggingface.co/stabilityai/stable-diffu
 ## Run
 We provide three methods to run our repo **web app (gradio)/ipynb/py**
 ### app
-Running the TF-GPH webui
 
+
+https://github.com/BlueDyee/TF-GPH/assets/113813598/0e58649a-98d7-4393-8665-dd58df7f510b
+
+
+Running the TF-GPH webui
 ```
 python tfgph_app.py
 ```
