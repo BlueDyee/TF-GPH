@@ -1,4 +1,4 @@
-name: tfphd
+name: tfgph
 channels:
   - pytorch
   - defaults
