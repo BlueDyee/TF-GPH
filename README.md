@@ -25,7 +25,15 @@ For example
 wget -O v2-1_512-ema-pruned.ckpt https://huggingface.co/stabilityai/stable-diffusion-2-1-base/resolve/main/v2-1_512-ema-pruned.ckpt?download=true
 ```
 ## Run
-We provide three methods to run our repo **py/ipynb/web app (gradio)**
+We provide three methods to run our repo **web app (gradio)/ipynb/py**
+### app
+Working on it
+
+### ipynb
+```
+Runall
+```
+
 ### py
 Using default parameters
 ```
@@ -39,10 +47,5 @@ python tfgph_main.py --ref1 "./inputs/demo_input/kangaroo.jpg" \
                      --share_step 15 \
                      --share_layer 12 \
 ```
-### ipynb
-```
-Runall
-```
-### app
-Working on it
+
 
