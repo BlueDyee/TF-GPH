@@ -1,8 +1,8 @@
 # TF-GPH
 Training-and-pormpt Free General Painterly Image Harmonization Using image-wise attention sharing
 ![image](https://github.com/BlueDyee/TF-GPH/blob/main/github_source/fig1.png)
+![image](https://github.com/BlueDyee/TF-GPH/blob/main/github_source/tf-gph_demo.gif)
 ## Setup
-
 Our codebase is built on [Stable-Diffusion](https://github.com/Stability-AI/stablediffusion)
 and has shared dependencies and model architecture. A VRAM of 23 GB is recommended (RTX 3090 for example), though this may vary depending on the input samples (minimum 20 GB). 
 
