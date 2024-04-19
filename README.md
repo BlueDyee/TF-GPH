@@ -1,5 +1,6 @@
 # TF-GPH
 Training-and-pormpt Free General Painterly Image Harmonization Using image-wise attention sharing
+![image](https://github.com/BlueDyee/TF-GPH/blob/main/github_source/fig1.png)
 ## Setup
 
 Our codebase is built on [Stable-Diffusion](https://github.com/Stability-AI/stablediffusion)
@@ -56,5 +57,12 @@ python tfgph_main.py --ref1 "./inputs/demo_input/kangaroo.jpg" \
                      --share_step 15 \
                      --share_layer 12 \
 ```
+
+### More Results
+![image](https://github.com/BlueDyee/TF-GPH/blob/main/github_source/fig4.png)
+![image](https://github.com/BlueDyee/TF-GPH/blob/main/github_source/fig17.png)
+![image](https://github.com/BlueDyee/TF-GPH/blob/main/github_source/fig18.png)
+![image](https://github.com/BlueDyee/TF-GPH/blob/main/github_source/fig14.png)
+![image](https://github.com/BlueDyee/TF-GPH/blob/main/github_source/fig15.png)
 
 
