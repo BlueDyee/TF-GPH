@@ -1,3 +1,4 @@
+[![arXiv](https://img.shields.io/badge/arXiv-2404.12900-b31b1b.svg)](https://arxiv.org/abs/2404.12900)
 # TF-GPH
 Training-and-pormpt Free General Painterly Image Harmonization Using image-wise attention sharing
 ![image](https://github.com/BlueDyee/TF-GPH/blob/main/github_source/fig1.png)
