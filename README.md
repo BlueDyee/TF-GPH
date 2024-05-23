@@ -58,6 +58,29 @@ python tfgph_main.py --ref1 "./inputs/demo_input/kangaroo.jpg" \
                      --share_step 15 \
                      --share_layer 12 \
 ```
+## Evaluation of GPH Benchmark
+Your data directory should be looked like:
+```
+GPH Benchmark demo data
+├── background_data
+│   ├── x.png
+│   └── xx.png
+├── composite_data
+│   ├── x.png
+│   └── xx.png
+├── foreground_data
+│   ├── x.png
+│   └── xx.png
+├── harmonized_data **(Your Generation result)**
+│   ├── x.png
+│   └── xx.png
+├── mask_data
+│   ├── x.png
+│   └── xx.png
+```
+```
+python comput_metrics.py -r "GPH Benchmark demo data"
+```
 
 ### More Results
 ![image](https://github.com/BlueDyee/TF-GPH/blob/main/github_source/fig4.png)
