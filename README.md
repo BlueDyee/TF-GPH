@@ -46,6 +46,11 @@ Using default parameters
 python tfgph_main.py 
 ```
 Customize parameters
+
+(Due to the conflict between mathematical correctness and code conciseness, the effect of share_step in the code is different from that in the paper.)
+
+(In the code, share_step views the inverted latent z_T as 0th step, so share_step 15 means to normally denoise for 15 steps, then denoise with shared attention in the remaining steps.)
+
 ```
 python tfgph_main.py --ref1 "./inputs/demo_input/kangaroo.jpg" \
                      --ref2 "./inputs/demo_input/starry_night.jpg" \
