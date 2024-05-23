@@ -19,24 +19,7 @@ import cv2
 def parse_argument():
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "-r", "--img-root", type=str, default="./", help="Path to ground truth images"
-    )
-    parser.add_argument(
-        "-f", "--label-file", type=str, default="harmonized_result.csv", help="Path to predicted images"
-    )
-    parser.add_argument(
-        "-p",
-        "--prefix",
-        type=str,
-        default="tfphd",
-        help="Prefix for controlling the target dataset",
-    )
-    parser.add_argument(
-        "-d",
-        "--device",
-        type=int,
-        default=0,
-        help="Which GPU",
+        "-r", "--imgs-root", type=str, default="./GPH Benchmark demo data", help="Path to ground truth images"
     )
     parser.add_argument(
         "-cm",
@@ -128,7 +111,17 @@ def compute_lpips(
     crop_source= (source_img * composite_mask[:, :, None])[top:bottom, left:right]
     bg_stylized_img = stylized_img * (1 - composite_mask[:, :, None])
     bg_style_img = style_img * (1 - composite_mask[:, :, None])
-       
+    
+    """
+    pil_image = Image.fromarray(bg_stylized_img)
+    pil_image.save("./test/bg_img.png")
+
+    pil_image = Image.fromarray(bg_style_img)
+    pil_image.save("./test/bg_style_img.png")
+    exit()
+    """
+    
+    
     fg_score = lpips_model(
         to_rgb_tensor(crop_stylized_img,size=source_img.shape[:2]), to_rgb_tensor(crop_source,size=source_img.shape[:2])
     ).item()
@@ -166,6 +159,7 @@ def compute_clip_score(
 
     preprocess_stylized_img = clip_model[1](Image.fromarray(stylized_img)).unsqueeze(0).to(device)
     preprocess_style_img = clip_model[1](Image.fromarray(style_img)).unsqueeze(0).to(device)
+    #stylized_features = F_torch.normalize(clip_model[0].encode_image(preprocess_stylized_img), dim=-1)
     style_features = F_torch.normalize(clip_model[0].encode_image(preprocess_style_img), dim=-1)
     
     style_score = (crop_stylized_features .squeeze() @ style_features.squeeze()).item() * 100
@@ -180,7 +174,7 @@ def compute_clip_score(
     if prompt is not None:
         tokenized_prompt = clip.tokenize([prompt]).to(device)
         text_features = F_torch.normalize(clip_model[0].encode_text(tokenized_prompt), dim=-1)
-        text_score = (crop_stylized_features.squeeze() @ text_features.squeeze()).item() * 100
+        #text_score = (stylized_features.squeeze() @ text_features.squeeze()).item() * 100
 
 
     return img_score, style_score, dir_score, text_score
@@ -188,7 +182,6 @@ def compute_clip_score(
 
 def main(args):
     device = "cuda" if torch.cuda.is_available() else "cpu"
-    torch.cuda.set_device(args.device)  # set the GPU device
     lpips_fn = lpips.LPIPS(net="alex")
     clip_model = clip.load(args.clip_model_type, device=device)
 
@@ -197,83 +190,43 @@ def main(args):
         box_meter = MetricMeter()
     else:
         box_meter=False
+    idxs=[file[:-4] for file in os.listdir(os.path.join(args.imgs_root, "harmonized_data"))]
+    for i in tqdm(idxs):
+        source_img_path = os.path.join(args.imgs_root, "composite_data", f"{i}.png")
+        composite_mask_path = os.path.join(args.imgs_root, "mask_data", f"{i}.png")
+        style_img_path = os.path.join(args.imgs_root, "background_data",  f"{i}.png")
+        stylized_img_path = os.path.join(args.imgs_root, "harmonized_data",  f"{i}.png")
 
-    with open(args.label_file, "r") as label_f:
-        idx=-1
-        for line in tqdm(label_f.readlines()):
-            idx+=1
-            (
-                source_img_name,
-                composite_mask_name,
-                style_img_name,
-                style_text,
-                _,
-                stylized_img_name,
-            ) = line.strip().split(",")
+        source_img = np.array(Image.open(source_img_path).convert("RGB"))
+        composite_mask = np.array(Image.open(composite_mask_path).convert("L"))//255
+        style_img = np.array(Image.open(style_img_path).convert("RGB"))
+        stylized_img = np.array(Image.open(stylized_img_path).convert("RGB"))
+        
+        fg_lpips, bg_lpips = compute_lpips(
+            source_img, style_img, stylized_img, composite_mask, lpips_fn
+        )
+        img_clip, style_clip, dir_clip, text_clip = compute_clip_score(
+            source_img,
+            style_img,
+            stylized_img,
+            composite_mask,
+            clip_model,
+            device,
+            #prompt=f"a photo in {style_text} style",
+        )
 
-            source_img_path = os.path.join(args.img_root, "foreground_data", source_img_name)
-            composite_mask_path = os.path.join(args.img_root, "mask_data", composite_mask_name)
-            box_mask_path=  os.path.join(args.img_root, "box_data", f"{idx}.png")
-            style_img_path = os.path.join(args.img_root, "background_data", style_img_name)
-            stylized_img_path = os.path.join(args.img_root, f"{args.prefix}_harmonized_data", stylized_img_name)
+        meter.update(
+            {
+                "bg_lpips": bg_lpips,
+                "fg_lpips": fg_lpips,
+                "img_clip": img_clip,
+                "style_clip": style_clip,
+                "dir_clip": dir_clip,
+                #"text_clip": text_clip,
+            }
+        )
 
-            source_img = np.array(Image.open(source_img_path).convert("RGB"))
-            composite_mask = np.array(Image.open(composite_mask_path).convert("L"))//255
-            box_mask=np.array(Image.open(box_mask_path).convert("L"))//255
-            style_img = np.array(Image.open(style_img_path).convert("RGB"))
-            stylized_img = np.array(Image.open(stylized_img_path).convert("RGB"))
-            
-            fg_lpips, bg_lpips = compute_lpips(
-                source_img, style_img, stylized_img, composite_mask, lpips_fn
-            )
-            img_clip, style_clip, dir_clip, text_clip = compute_clip_score(
-                source_img,
-                style_img,
-                stylized_img,
-                composite_mask,
-                clip_model,
-                device,
-                #prompt=f"a photo in {style_text} style",
-            )
-
-            meter.update(
-                {
-                    "bg_lpips": bg_lpips,
-                    "fg_lpips": fg_lpips,
-                    "img_clip": img_clip,
-                    "style_clip": style_clip,
-                    "dir_clip": dir_clip,
-                    #"text_clip": text_clip,
-                }
-            )
-
-            # Box meter
-            if box_meter:
-                fg_lpips, bg_lpips = compute_lpips(
-                    source_img, style_img, stylized_img, box_mask, lpips_fn
-                )
-                img_clip, style_clip, dir_clip, text_clip = compute_clip_score(
-                    source_img,
-                    style_img,
-                    stylized_img,
-                    box_mask,
-                    clip_model,
-                    device,
-                    #prompt=f"a photo in {style_text} style",
-                )
-                box_meter.update(
-                    {
-                        "bg_lpips": bg_lpips,
-                        "fg_lpips": fg_lpips,
-                        "img_clip": img_clip,
-                        "style_clip": style_clip,
-                        "dir_clip": dir_clip,
-                        #"text_clip": text_clip,
-                    }
-                )
-        print("Segment meter",meter)
-        if box_meter:
-            print("Box meter:", box_meter)
+    print("Segment meter:",meter)
 
 
 if __name__ == "__main__":
