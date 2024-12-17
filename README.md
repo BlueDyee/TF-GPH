@@ -1,7 +1,7 @@
 [![arXiv](https://img.shields.io/badge/arXiv-2404.12900-b31b1b.svg)](https://arxiv.org/abs/2404.12900)
-# TF-GPH
-Training-and-pormpt Free General Painterly Image Harmonization Using image-wise attention sharing
-![image](https://github.com/BlueDyee/TF-GPH/blob/main/github_source/fig1.png)
+# TF-GPH (AAAI'25)
+**Training-and-Prompt-Free General Painterly Harmonization via Zero-Shot Disentenglement on Style and Content References**
+![image](https://github.com/BlueDyee/TF-GPH/blob/main/github_source/fig1_new.png.png)
 ![image](https://github.com/BlueDyee/TF-GPH/blob/main/github_source/tf-gph_demo.gif)
 ## Setup
 Our codebase is built on [Stable-Diffusion](https://github.com/Stability-AI/stablediffusion)
